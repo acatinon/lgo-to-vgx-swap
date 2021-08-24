@@ -2,17 +2,17 @@
 pragma solidity ^0.8.0;
 
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
 
 abstract contract OfficialSwapInterface {
     function swap(uint256 _amount) public virtual;
 }
 
-contract Swap {
+contract Swap is Ownable {
     uint256 private feesRate = 10000000000000000; // 1%
 
     uint256 private swapFromQuantity = 65356340619;
     uint256 private swapToQuantity = 10000000000;
-    address private feesDest;
 
     IERC20 private lgoToken;
     IERC20 private vgxToken;
@@ -37,13 +37,13 @@ contract Swap {
 
         vgxToken.transferFrom(
             address(this),
-            msg.sender,
+            _msgSender(),
             exchangeAmount * ((10 ^ 18) - feesRate)
         );
 
         vgxToken.transferFrom(
             address(this),
-            msg.sender,
+            owner(),
             exchangeAmount * feesRate
         );
     }

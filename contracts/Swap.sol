@@ -4,7 +4,7 @@ pragma solidity ^0.8.0;
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
-abstract contract OfficialSwapInterface {
+abstract contract OfficialSwap {
     function swap(uint256 _amount) public virtual;
 }
 
@@ -16,12 +16,12 @@ contract Swap is Ownable {
 
     IERC20 private lgoToken;
     IERC20 private vgxToken;
-    OfficialSwapInterface private officialSwapContract;
+    OfficialSwap private officialSwapContract;
 
     constructor(
         IERC20 _lgoToken,
         IERC20 _vgxToken,
-        OfficialSwapInterface _officialSwapContract
+        OfficialSwap _officialSwapContract
     ) {
         lgoToken = _lgoToken;
         vgxToken = _vgxToken;

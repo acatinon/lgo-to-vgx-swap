@@ -13,13 +13,17 @@ async function main() {
   // manually to make sure everything is compiled
   // await hre.run('compile');
 
+  const lgoToken = '0x0a50C93c762fDD6E56D86215C24AaAD43aB629aa';
+  const vgxToken = '0x3C4B6E6e1eA3D4863700D7F76b36B7f3D3f13E3d';
+  const swapContract = '0xd6A32053a58a33B05bAD9B388c82BCcF203EE714';
+
   // We get the contract to deploy
-  const Greeter = await hre.ethers.getContractFactory("Greeter");
-  const greeter = await Greeter.deploy("Hello, Hardhat!");
+  const Swap = await hre.ethers.getContractFactory("Swap");
+  const swap = await Swap.deploy(lgoToken, vgxToken, swapContract);
 
-  await greeter.deployed();
+  await swap.deployed();
 
-  console.log("Greeter deployed to:", greeter.address);
+  console.log("Swap deployed to:", swap.address);
 }
 
 // We recommend this pattern to be able to use async/await everywhere

@@ -4,12 +4,14 @@ pragma solidity ^0.8.0;
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
+import "hardhat/console.sol";
+
 abstract contract OfficialSwap {
     function swap(uint256 _amount) public virtual;
 }
 
 contract Swap is Ownable {
-    uint256 private feesRate = 10000000000000000; // 1%
+    uint256 private feesRate = 100; // 1%
 
     uint256 private swapFromQuantity = 65356340619;
     uint256 private swapToQuantity = 10000000000;
@@ -26,25 +28,22 @@ contract Swap is Ownable {
         lgoToken = _lgoToken;
         vgxToken = _vgxToken;
         officialSwapContract = _officialSwapContract;
+
+        lgoToken.approve(address(officialSwapContract), 100000);
     }
 
     function swap(uint256 _amount) public {
-        lgoToken.transfer(address(this), _amount);
+        lgoToken.transferFrom(_msgSender(), address(this), _amount);
 
         officialSwapContract.swap(_amount);
 
         uint256 exchangeAmount = (_amount * swapToQuantity) / swapFromQuantity;
 
-        vgxToken.transferFrom(
-            address(this),
+        vgxToken.transfer(
             _msgSender(),
-            exchangeAmount * ((10 ^ 18) - feesRate)
+            (exchangeAmount * (10000 - feesRate)) / 10000
         );
 
-        vgxToken.transferFrom(
-            address(this),
-            owner(),
-            exchangeAmount * feesRate
-        );
+        vgxToken.transfer(owner(), (exchangeAmount * feesRate) / 10000);
     }
 }

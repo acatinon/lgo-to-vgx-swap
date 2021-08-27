@@ -19,6 +19,7 @@
     "autoprefixer": "^10.3.2",
     "ethers": "^5.4.5",
     "svelte": "^3.35.0",
-    "tailwindcss": "^2.2.7"
+    "tailwindcss": "^2.2.7",
+    "web3modal": "^1.9.4"
   }
 }

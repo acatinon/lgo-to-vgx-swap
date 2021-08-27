@@ -87,7 +87,8 @@ button,
 select {
   text-transform: none;
 }
-button {
+button,
+[type=button] {
   -webkit-appearance: button;
 }
 legend {

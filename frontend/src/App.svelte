@@ -1,6 +1,7 @@
 <script lang="typescript">
   import { onMount } from "svelte";
   import { web3 } from "./utils/web3";
+  import { ERC20 } from "./utils/contracts"
 
   import type { ethers } from "ethers";
 
@@ -15,7 +16,13 @@
 
   const onConnected = async (
     ethersProvider: ethers.providers.Web3Provider
-  ) => {};
+  ) => {
+    let accounts = await ethersProvider.listAccounts();
+
+    let lgo = new ERC20(ethersProvider, "0x0a50C93c762fDD6E56D86215C24AaAD43aB629aa", 8);
+
+    console.log(await (await lgo.balanceOf(accounts[0])).toString())
+  };
 </script>
 
 {#if $web3Provider.isConnected}

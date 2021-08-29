@@ -11,23 +11,25 @@ abstract contract OfficialSwap {
 }
 
 contract Swap is Ownable {
-    uint256 private feesRate = 100; // 1%
+    uint256 public feesRate;
 
     uint256 private swapFromQuantity = 65356340619;
     uint256 private swapToQuantity = 10000000000;
 
-    IERC20 private lgoToken;
-    IERC20 private vgxToken;
-    OfficialSwap private officialSwapContract;
+    IERC20 public lgoToken;
+    IERC20 public vgxToken;
+    OfficialSwap public officialSwapContract;
 
     constructor(
         IERC20 _lgoToken,
         IERC20 _vgxToken,
-        OfficialSwap _officialSwapContract
+        OfficialSwap _officialSwapContract,
+        uint256 _feesRate
     ) {
         lgoToken = _lgoToken;
         vgxToken = _vgxToken;
         officialSwapContract = _officialSwapContract;
+        feesRate = _feesRate;
 
         lgoToken.approve(address(officialSwapContract), 100000);
     }
@@ -43,6 +45,11 @@ contract Swap is Ownable {
             _msgSender(),
             (exchangeAmount * (10000 - feesRate)) / 10000
         );
+    }
+
+    function updateFeesRate(uint256 _feesRate) public onlyOwner {
+        require(_feesRate < 100000, "The swap fees must be < 100%");
+        feesRate = _feesRate;
     }
 
     function withdraw() public onlyOwner {

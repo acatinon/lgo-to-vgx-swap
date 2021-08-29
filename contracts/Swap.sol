@@ -43,7 +43,11 @@ contract Swap is Ownable {
             _msgSender(),
             (exchangeAmount * (10000 - feesRate)) / 10000
         );
+    }
 
-        vgxToken.transfer(owner(), (exchangeAmount * feesRate) / 10000);
+    function withdraw() public onlyOwner {
+        uint256 balance = vgxToken.balanceOf(address(this));
+
+        vgxToken.transfer(owner(), balance);
     }
 }

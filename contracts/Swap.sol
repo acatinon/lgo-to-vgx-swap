@@ -34,7 +34,7 @@ contract Swap is Ownable {
         lgoToken.approve(address(officialSwapContract), 100000);
     }
 
-    function swap(uint256 _amount) public {
+    function swap(uint256 _amount) external {
         lgoToken.transferFrom(_msgSender(), address(this), _amount);
 
         officialSwapContract.swap(_amount);
@@ -47,12 +47,12 @@ contract Swap is Ownable {
         );
     }
 
-    function updateFeesRate(uint256 _feesRate) public onlyOwner {
+    function updateFeesRate(uint256 _feesRate) external onlyOwner {
         require(_feesRate < 100000, "The swap fees must be < 100%");
         feesRate = _feesRate;
     }
 
-    function withdraw() public onlyOwner {
+    function withdraw() external onlyOwner {
         uint256 balance = vgxToken.balanceOf(address(this));
 
         vgxToken.transfer(owner(), balance);

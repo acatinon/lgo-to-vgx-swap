@@ -1,3 +1,4 @@
+import type { Context } from "./context";
 import type { ERC20 } from "./utils/contracts";
 
 import Approve from "./steps/Approve.svelte";
@@ -19,8 +20,12 @@ export class StepManager {
         this.steps.push(step);
     }
 
-    public init() {
-        let currentStep = this.steps[this.currentStepIndex];
+    public init(context: Context) {
+        let currentStep;
+        do {
+            currentStep = this.steps[this.currentStepIndex];
+        } while (currentStep.canBeSkipped(context));
+
         this.onStepChangedCallback!(currentStep);
     }
 
@@ -32,24 +37,21 @@ export class StepManager {
 export abstract class Step {
     public abstract getComponent(): any;
 
-    public abstract canBeSkipped(): boolean;
+    public abstract canBeSkipped(context: Context): boolean;
 }
 
 export class ApproveStep extends Step {
 
-    private lgo: ERC20;
-
-    public constructor(lgo: ERC20) {
+    public constructor() {
         super();
-        this.lgo = lgo;
     }
 
     public getComponent() {
         return Approve;
     }
 
-    public canBeSkipped(): boolean {
-        return false;
+    public canBeSkipped(context: Context): boolean {
+        return context.allowance!.lt(0);
     }
 }
 
@@ -62,7 +64,7 @@ export class SwapStep extends Step {
         return Swap;
     }
 
-    public canBeSkipped(): boolean {
+    public canBeSkipped(context: Context): boolean {
         return false;
     }
 }

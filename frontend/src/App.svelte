@@ -19,10 +19,6 @@
 
   setContext("context", context);
 
-  onMount(async () => {
-    web3Provider.connectIfCachedProvider().then(onConnected);
-  });
-
   const connect = () => {
     web3Provider.connect().then(onConnected);
   };

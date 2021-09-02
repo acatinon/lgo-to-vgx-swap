@@ -33,8 +33,10 @@
   };
 </script>
 
-{#if $web3Provider.isConnected}
-  <svelte:component this={currentStepComponent} />
-{:else}
-  <button class="p-1" on:click={connect}>Connect your wallet</button>
-{/if}
+<div class="m-auto">
+  {#if $web3Provider.isConnected}
+    <svelte:component this={currentStepComponent} />
+  {:else}
+    <button class="p-1" on:click={connect}>Connect your wallet</button>
+  {/if}
+</div>

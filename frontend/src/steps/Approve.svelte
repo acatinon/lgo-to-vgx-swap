@@ -21,9 +21,13 @@
       new BigNumber(approveInput!.getNumericString()!)
     );
   };
+
+  const setMax = () => {
+    approveInput.set(context.lgoBalance!.toString());
+  };
 </script>
 
 <p>{context.lgoBalance}</p>
 <input id="approveAmount" type="text" />
-<a href="#">Max</a>
+<button on:click={setMax}>Max</button>
 <button on:click={approve}>Approve</button>

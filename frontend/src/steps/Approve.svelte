@@ -8,10 +8,8 @@
   let approveInput: AutoNumeric;
 
   onMount(async () => {
-    approveInput = new AutoNumeric("#approveAmount", 0, {
+    AutoNumeric.multiple(".formatted-number", null, {
       decimalPlaces: 8,
-      minimumValue: "0",
-      maximumValue: context.lgoBalance!.toString(),
     });
   });
 
@@ -27,7 +25,12 @@
   };
 </script>
 
-<p>{context.lgoBalance}</p>
-<input id="approveAmount" type="text" />
-<button on:click={setMax}>Max</button>
-<button on:click={approve}>Approve</button>
+<p>
+  Looks like you have <span class="formatted-number">{context.lgoBalance}</span>
+  LGO. With this small tool, you will be able to swap them to VGX 2.0. Let's go!
+</p>
+<p>
+  First, you need to allow this tool to transfer your LGOs from your wallet to
+  the smart contract, which will perform the swap.
+</p>
+<button class="block w-full" on:click={approve}>Approve</button>

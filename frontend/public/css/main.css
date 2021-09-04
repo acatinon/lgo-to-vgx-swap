@@ -4,10 +4,16 @@
 
 @layer base {
   p {
-    @apply mb-5 text-justify;
+    @apply mb-5 text-justify leading-relaxed;
   }
 
   button {
     @apply bg-purple-600 text-white px-4 py-2 font-bold rounded;
+  }
+}
+
+@layer components {
+  .emphasis {
+    @apply bg-purple-200 text-purple-700 p-1;
   }
 }

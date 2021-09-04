@@ -26,7 +26,9 @@
 </script>
 
 <p>
-  Looks like you have <span class="formatted-number">{context.lgoBalance}</span>
+  Looks like you have <span class="formatted-number emphasis"
+    >{context.lgoBalance}</span
+  >
   LGO. With this small tool, you will be able to swap them to VGX 2.0. Let's go!
 </p>
 <p>

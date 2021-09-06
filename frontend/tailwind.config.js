@@ -3,6 +3,11 @@ module.exports = {
     './public/*.html',
     './src/**/*.svelte',
   ],
+  variants: {
+    extend: {
+      backgroundColor: ['disabled'],
+    }
+  },
   theme: {
     container: {
       center: true,
@@ -12,6 +17,6 @@ module.exports = {
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
       }
-    }
+    },
   },
 }

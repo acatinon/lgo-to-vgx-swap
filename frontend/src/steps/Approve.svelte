@@ -5,7 +5,7 @@
   import type { Context } from "../context";
 
   let context: Context = getContext("context");
-  let approveInput: AutoNumeric;
+  let disableApprove = false;
 
   onMount(async () => {
     AutoNumeric.multiple(".formatted-number", null, {
@@ -13,15 +13,23 @@
     });
   });
 
-  const approve = () => {
-    context.lgo!.approve(
-      "0x0E801D84Fa97b50751Dbf25036d067dCf18858bF",
-      new BigNumber(approveInput!.getNumericString()!)
-    );
-  };
-
-  const setMax = () => {
-    approveInput.set(context.lgoBalance!.toString());
+  const approve = async () => {
+    disableApprove = true;
+    context
+      .lgo!.approve(
+        "0x0E801D84Fa97b50751Dbf25036d067dCf18858bF",
+        context!.lgoBalance!
+      )
+      .then((result) => {
+        if (result) {
+        } else {
+          disableApprove = false;
+        }
+      })
+      .catch((reason) => {
+        disableApprove = false;
+        console.warn(reason);
+      });
   };
 </script>
 
@@ -35,4 +43,8 @@
   First, you need to allow this tool to transfer your LGOs from your wallet to
   the smart contract, which will perform the swap.
 </p>
-<button class="block w-full" on:click={approve}>Approve</button>
+<button
+  class="block w-full disabled:bg-purple-400"
+  disabled={disableApprove}
+  on:click={approve}>Approve</button
+>

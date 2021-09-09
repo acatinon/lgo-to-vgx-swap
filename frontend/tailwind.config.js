@@ -5,7 +5,7 @@ module.exports = {
   ],
   variants: {
     extend: {
-      backgroundColor: ['disabled'],
+      display: ['disabled'],
     }
   },
   theme: {

@@ -1,8 +1,7 @@
 <script lang="typescript">
   import { setContext } from "svelte";
   import BigNumber from "bignumber.js";
-  import { Context } from "./context";
-  import { StepManager, Step, ApproveStep, SwapStep } from "./steps";
+  import { StepManager } from "./steps";
   import { web3 } from "./utils/web3";
 
   import type { ethers } from "ethers";
@@ -11,25 +10,19 @@
   let currentStepComponent: any;
 
   const web3Provider = web3();
-  let context = new Context();
 
-  setContext("context", context);
+  setContext("stepManager", stepManager);
 
   const connect = () => {
     web3Provider.connect().then(onConnected);
   };
 
   const onConnected = async (ethersProvider: ethers.providers.Web3Provider) => {
-    await context.init(ethersProvider);
-
-    stepManager.addStep(new ApproveStep());
-    stepManager.addStep(new SwapStep());
-
-    stepManager.onStepChanged((step: Step) => {
-      currentStepComponent = step.getComponent();
+    stepManager.onStepChanged((component: any) => {
+      currentStepComponent = component;
     });
 
-    stepManager.init(context);
+    await stepManager.init(ethersProvider);
   };
 </script>
 

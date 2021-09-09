@@ -2,9 +2,9 @@
   import { onMount, getContext } from "svelte";
   import BigNumber from "bignumber.js";
   import AutoNumeric from "autonumeric";
-  import type { Context } from "../context";
+  import type { StepManager } from "../steps";
 
-  let context: Context = getContext("context");
+  let stepManager: StepManager = getContext("stepManager");
   let disableApprove = false;
 
   onMount(async () => {
@@ -15,13 +15,14 @@
 
   const approve = async () => {
     disableApprove = true;
-    context
+    stepManager.context
       .lgo!.approve(
         "0x0E801D84Fa97b50751Dbf25036d067dCf18858bF",
-        context!.lgoBalance!
+        stepManager.context!.lgoBalance!
       )
       .then((result) => {
         if (result) {
+          stepManager.approving();
         } else {
           disableApprove = false;
         }
@@ -35,7 +36,7 @@
 
 <p>
   Looks like you have <span class="formatted-number emphasis"
-    >{context.lgoBalance}</span
+    >{stepManager.context.lgoBalance}</span
   >
   LGO. With this small tool, you will be able to swap them to VGX 2.0. Let's go!
 </p>

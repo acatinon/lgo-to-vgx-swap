@@ -1,70 +1,41 @@
-import type { Context } from "./context";
-import type { ERC20 } from "./utils/contracts";
+import type { ethers } from "ethers";
+import BigNumber from "bignumber.js";
+import { Context } from "./context";
 
 import Approve from "./steps/Approve.svelte";
+import Wait from "./steps/Wait.svelte";
 import Swap from "./steps/Swap.svelte";
 
 export class StepManager {
-    private steps: Step[];
-    private currentStepIndex: number;
-    private onStepChangedCallback?: (step: Step) => void;
+  public context: Context;
+  private onStepChangedCallback?: (component: any) => void;
 
+  public constructor() {
+    this.context = new Context();
+    this.onStepChangedCallback = undefined;
+  }
 
-    public constructor() {
-        this.steps = [];
-        this.currentStepIndex = 0;
-        this.onStepChangedCallback = undefined;
+  public async init(ethersProvider: ethers.providers.Web3Provider) {
+    await this.context.init(ethersProvider);
+
+    if (this.context.allowance!.gt(0)) {
+      this.onStepChangedCallback!(Swap);
     }
+    else {
+      this.context.lgo!.onApprove(this.context.account!, (owner: string, spender: string, amount: ethers.BigNumber) => {
+        this.context.allowance = new BigNumber(amount.toString());
+        this.onStepChangedCallback!(Swap);
+      });
 
-    public addStep(step: Step): void {
-        this.steps.push(step);
+      this.onStepChangedCallback!(Approve);
     }
+  }
 
-    public init(context: Context) {
-        let currentStep;
-        do {
-            currentStep = this.steps[this.currentStepIndex];
-        } while (currentStep.canBeSkipped(context));
+  public approving() {
+    this.onStepChangedCallback!(Wait);
+  }
 
-        this.onStepChangedCallback!(currentStep);
-    }
-
-    public onStepChanged(callback: (step: Step) => void): any {
-        this.onStepChangedCallback = callback;
-    }
-}
-
-export abstract class Step {
-    public abstract getComponent(): any;
-
-    public abstract canBeSkipped(context: Context): boolean;
-}
-
-export class ApproveStep extends Step {
-
-    public constructor() {
-        super();
-    }
-
-    public getComponent() {
-        return Approve;
-    }
-
-    public canBeSkipped(context: Context): boolean {
-        return context.allowance!.lt(0);
-    }
-}
-
-export class AWaitForApprovalConfirmationStep {
-
-}
-
-export class SwapStep extends Step {
-    public getComponent() {
-        return Swap;
-    }
-
-    public canBeSkipped(context: Context): boolean {
-        return false;
-    }
+  public onStepChanged(callback: (component: any) => void): any {
+    this.onStepChangedCallback = callback;
+  }
 }

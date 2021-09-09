@@ -16,7 +16,8 @@ export class ERC20 extends Contract {
         const erc20Abi = [
             "function approve(address spender, uint256 amount) external returns (bool)",
             "function allowance(address owner, address spender) external view returns (uint256)",
-            "function balanceOf(address account) external view returns (uint256)"
+            "function balanceOf(address account) external view returns (uint256)",
+            "event Approval(address indexed owner, address indexed spender, uint256 value)"
         ];
 
         super(signer, addr, erc20Abi);
@@ -26,6 +27,11 @@ export class ERC20 extends Contract {
     public async approve(spender: string, amount: BigNumber): Promise<boolean> {
         let amountBn = ethers.BigNumber.from(amount.multipliedBy(Math.pow(10, this.decimals)).toString());
         return await this.ethersContract.approve(spender, amountBn);
+    }
+
+    public onApprove(owner: string, callback: (owner: string, spender: string, amount: ethers.BigNumber) => void) {
+        const filter = this.ethersContract.filters.Approval(owner);
+        this.ethersContract.on(filter, callback);
     }
 
     public async allowance(owner: string, spender: string): Promise<BigNumber> {

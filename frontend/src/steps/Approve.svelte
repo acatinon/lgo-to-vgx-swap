@@ -1,6 +1,5 @@
 <script lang="typescript">
   import { onMount, getContext } from "svelte";
-  import BigNumber from "bignumber.js";
   import AutoNumeric from "autonumeric";
   import type { StepManager } from "../steps";
 
@@ -16,10 +15,7 @@
   const approve = async () => {
     disableApprove = true;
     stepManager.context
-      .lgo!.approve(
-        "0x0E801D84Fa97b50751Dbf25036d067dCf18858bF",
-        stepManager.context!.lgoBalance!
-      )
+      .lgo!.approve("0x0E801D84Fa97b50751Dbf25036d067dCf18858bF", stepManager.context!.lgoBalance!)
       .then((result) => {
         if (result) {
           stepManager.approving();
@@ -27,48 +23,31 @@
           disableApprove = false;
         }
       })
-      .catch((reason) => {
+      .catch((error) => {
         disableApprove = false;
-        console.warn(reason);
+        stepManager.showError(error);
       });
   };
 </script>
 
 <p>
-  Looks like you have <span class="formatted-number emphasis"
-    >{stepManager.context.lgoBalance}</span
-  >
+  Looks like you have <span class="formatted-number emphasis">{stepManager.context.lgoBalance}</span>
   LGO. With this small tool, you will be able to swap them to VGX 2.0. Let's go!
 </p>
 <p>
-  First, you need to allow this tool to transfer your LGOs from your wallet to
-  the smart contract, which will perform the swap.
+  First, you need to allow this tool to transfer your LGOs from your wallet to the smart contract, which will perform
+  the swap.
 </p>
-<button
-  class="block w-full disabled:hidden"
-  disabled={disableApprove}
-  on:click={approve}
->
-  Approve</button
->
+<button class="block w-full disabled:hidden" disabled={disableApprove} on:click={approve}> Approve</button>
 {#if disableApprove}
-  <div
-    class="flex items-center justify-center bg-purple-400 text-center text-white px-4 py-2 font-bold rounded"
-  >
+  <div class="flex items-center justify-center bg-purple-400 text-center text-white px-4 py-2 font-bold rounded">
     <svg
       class="animate-spin mr-3 h-5 w-5 text-white"
       xmlns="http://www.w3.org/2000/svg"
       fill="none"
       viewBox="0 0 24 24"
     >
-      <circle
-        class="opacity-25"
-        cx="12"
-        cy="12"
-        r="10"
-        stroke="currentColor"
-        stroke-width="4"
-      />
+      <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" />
       <path
         class="opacity-75"
         fill="currentColor"

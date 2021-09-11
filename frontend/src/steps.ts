@@ -9,10 +9,12 @@ import Swap from "./steps/Swap.svelte";
 export class StepManager {
   public context: Context;
   private onStepChangedCallback?: (component: any) => void;
+  private onErrordCallback?: (error: Error) => void;
 
   public constructor() {
     this.context = new Context();
     this.onStepChangedCallback = undefined;
+    this.onErrordCallback = undefined;
   }
 
   public async init(ethersProvider: ethers.providers.Web3Provider) {
@@ -35,7 +37,20 @@ export class StepManager {
     this.onStepChangedCallback!(Wait);
   }
 
+  public showError(error: Error) {
+    this.onErrordCallback!(error);
+  }
+
   public onStepChanged(callback: (component: any) => void): any {
     this.onStepChangedCallback = callback;
   }
+
+  public onError(callback: (error: Error) => void): any {
+    this.onErrordCallback = callback;
+  }
+}
+
+export type Error = {
+  code: number;
+  message: string;
 }

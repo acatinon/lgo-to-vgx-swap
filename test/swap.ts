@@ -25,7 +25,7 @@ describe("Swap", function () {
 
     const testAccount = await ethers.getSigner(testAccountAddress);
 
-    const Swap = await ethers.getContractFactory("Swap");
+    const Swap = await ethers.getContractFactory("UnofficialSwap");
     const swap = await Swap.deploy(lgoToken, vgxToken, swapContract, 100);
     await swap.deployed();
 

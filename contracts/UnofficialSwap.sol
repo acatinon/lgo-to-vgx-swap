@@ -10,7 +10,7 @@ abstract contract OfficialSwap {
     function swap(uint256 _amount) public virtual;
 }
 
-contract Swap is Ownable {
+contract UnofficialSwap is Ownable {
     uint256 public feesRate;
 
     uint256 private swapFromQuantity = 65356340619;
@@ -19,6 +19,12 @@ contract Swap is Ownable {
     IERC20 public lgoToken;
     IERC20 public vgxToken;
     OfficialSwap public officialSwapContract;
+
+    event Swap(
+        address indexed sender,
+        uint256 sentAmount,
+        uint256 receivedAmount
+    );
 
     constructor(
         IERC20 _lgoToken,
@@ -40,11 +46,12 @@ contract Swap is Ownable {
         officialSwapContract.swap(_amount);
 
         uint256 exchangeAmount = (_amount * swapToQuantity) / swapFromQuantity;
+        uint256 exchangeAmountMinusFees = (exchangeAmount *
+            (10000 - feesRate)) / 10000;
 
-        vgxToken.transfer(
-            _msgSender(),
-            (exchangeAmount * (10000 - feesRate)) / 10000
-        );
+        vgxToken.transfer(_msgSender(), exchangeAmountMinusFees);
+
+        emit Swap(msg.sender, _amount, exchangeAmountMinusFees);
     }
 
     function updateFeesRate(uint256 _feesRate) external onlyOwner {

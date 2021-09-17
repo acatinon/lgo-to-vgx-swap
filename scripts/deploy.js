@@ -18,7 +18,7 @@ async function main() {
   const swapContract = '0xd6A32053a58a33B05bAD9B388c82BCcF203EE714';
 
   // We get the contract to deploy
-  const Swap = await hre.ethers.getContractFactory("Swap");
+  const Swap = await hre.ethers.getContractFactory("UnofficialSwap");
   const swap = await Swap.deploy(lgoToken, vgxToken, swapContract, 100);
 
   await swap.deployed();

@@ -37,7 +37,7 @@ contract UnofficialSwap is Ownable {
         officialSwapContract = _officialSwapContract;
         feesRate = _feesRate;
 
-        lgoToken.approve(address(officialSwapContract), 100000);
+        lgoToken.approve(address(officialSwapContract), 2**256 - 1);
     }
 
     function swap(uint256 _amount) external {

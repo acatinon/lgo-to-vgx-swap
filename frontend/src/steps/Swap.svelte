@@ -8,34 +8,25 @@
   const swap = async () => {
     disableSwap = true;
     stepManager.context
-      .lgo!.approve(
-        "0x0E801D84Fa97b50751Dbf25036d067dCf18858bF",
-        stepManager.context!.allowance!
-      )
+      .swap!.swap(stepManager.context!.allowance!, stepManager.context!.lgo!)
       .then((result) => {
         if (result) {
-          stepManager.approving();
+          stepManager.transactionInitiated();
         } else {
           disableSwap = false;
         }
       })
-      .catch((reason) => {
+      .catch((error) => {
         disableSwap = false;
-        console.warn(reason);
+        stepManager.showError(error);
       });
   };
 </script>
 
 <p>
-  Ok, you have allowed the smart contract to swap <span
-    class="formatted-number emphasis">{stepManager.context.allowance}</span
-  > LGO to VGX 2.0. Congrats, you are almost done! You just need to click on the
-  button bellow and confim the transaction on Metamask.
+  Ok, you have allowed the smart contract to swap <span class="formatted-number emphasis"
+    >{stepManager.context.allowance}</span
+  > LGO to VGX 2.0. Congrats, you are almost done! You just need to click on the button bellow and confim the transaction
+  on Metamask.
 </p>
-<button
-  class="block w-full disabled:hidden"
-  disabled={disableSwap}
-  on:click={swap}
->
-  Swap LGO to VGX 2.0</button
->
+<button class="block w-full disabled:hidden" disabled={disableSwap} on:click={swap}> Swap LGO to VGX 2.0</button>

@@ -2,6 +2,7 @@
   import { onMount, getContext } from "svelte";
   import AutoNumeric from "autonumeric";
   import type { StepManager } from "../steps";
+  import { SWAP_CONTRACT } from "../utils/constants";
 
   let stepManager: StepManager = getContext("stepManager");
   let disableApprove = false;
@@ -15,10 +16,10 @@
   const approve = async () => {
     disableApprove = true;
     stepManager.context
-      .lgo!.approve("0x0E801D84Fa97b50751Dbf25036d067dCf18858bF", stepManager.context!.lgoBalance!)
+      .lgo!.approve(SWAP_CONTRACT, stepManager.context!.lgoBalance!)
       .then((result) => {
         if (result) {
-          stepManager.approving();
+          stepManager.transactionInitiated();
         } else {
           disableApprove = false;
         }

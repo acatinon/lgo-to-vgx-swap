@@ -10,7 +10,7 @@ class Contract {
 }
 
 export class ERC20 extends Contract {
-    private decimals: number;
+    public decimals: number;
 
     constructor(signer: ethers.providers.JsonRpcSigner, addr: string, decimals: number) {
         const erc20Abi = [
@@ -44,5 +44,27 @@ export class ERC20 extends Contract {
         const balance = await this.ethersContract.balanceOf(account);
 
         return new BigNumber(balance.toString()).dividedBy(Math.pow(10, this.decimals));
+    }
+}
+
+export class SwapContract extends Contract {
+
+    constructor(signer: ethers.providers.JsonRpcSigner, addr: string) {
+        const swapAbi = [
+            "function swap(uint256 amount) external",
+            "event Swap(address indexed sender, uint256 sentAmount, uint256 receivedAmount)"
+        ];
+
+        super(signer, addr, swapAbi);
+    }
+
+    public async swap(amount: BigNumber, lgo: ERC20): Promise<boolean> {
+        let amountBn = ethers.BigNumber.from(amount.multipliedBy(Math.pow(10, lgo.decimals)).toString());
+        return await this.ethersContract.swap(amountBn);
+    }
+
+    public onSwap(sender: string, callback: (sender: string, sentAmount: ethers.BigNumber, receivedAmount: ethers.BigNumber) => void) {
+        const filter = this.ethersContract.filters.Swap(sender);
+        this.ethersContract.on(filter, callback);
     }
 }

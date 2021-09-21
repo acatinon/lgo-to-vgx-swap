@@ -3,6 +3,8 @@
   import AutoNumeric from "autonumeric";
   import type { StepManager } from "../steps";
 
+  import DisabledButton from "../shared/DisabledButton.svelte";
+
   let stepManager: StepManager = getContext("stepManager");
   let disableSwap = false;
 
@@ -37,3 +39,6 @@
   on Metamask.
 </p>
 <button class="block w-full disabled:hidden" disabled={disableSwap} on:click={swap}> Swap LGO to VGX 2.0</button>
+{#if disableSwap}
+  <DisabledButton />
+{/if}

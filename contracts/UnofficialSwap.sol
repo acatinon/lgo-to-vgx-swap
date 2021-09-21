@@ -51,7 +51,7 @@ contract UnofficialSwap is Ownable {
 
         vgxToken.transfer(_msgSender(), exchangeAmountMinusFees);
 
-        emit Swap(msg.sender, _amount, exchangeAmountMinusFees);
+        emit Swap(_msgSender(), _amount, exchangeAmountMinusFees);
     }
 
     function updateFeesRate(uint256 _feesRate) external onlyOwner {

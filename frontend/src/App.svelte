@@ -1,7 +1,5 @@
 <script lang="typescript">
   import { setContext } from "svelte";
-  import BigNumber from "bignumber.js";
-  import type { Error } from "./steps";
   import { StepManager } from "./steps";
   import { web3 } from "./utils/web3";
 
@@ -10,6 +8,7 @@
   let stepManager = new StepManager();
   let currentStepComponent: any;
   let errorCode: number;
+  let errorMessage: string;
 
   const web3Provider = web3();
 
@@ -19,8 +18,9 @@
     currentStepComponent = component;
   });
 
-  stepManager.onError((error: Error) => {
-    errorCode = error.code;
+  stepManager.onError((code: number, message: string) => {
+    errorCode = code;
+    errorMessage = message;
   });
 
   const connect = () => {
@@ -50,7 +50,7 @@
         />
       </svg>
       <p>An error occured while processing the transaction!</p>
-      <p class="text-xl text-gray-500">Error code: {errorCode}</p>
+      <p class="text-lg text-gray-400">{errorMessage} (code: {errorCode})</p>
     </div>
   {:else if $web3Provider.isConnected}
     <svelte:component this={currentStepComponent} />

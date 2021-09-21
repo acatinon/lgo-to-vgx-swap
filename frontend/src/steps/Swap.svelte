@@ -1,9 +1,16 @@
 <script lang="typescript">
   import { onMount, getContext } from "svelte";
+  import AutoNumeric from "autonumeric";
   import type { StepManager } from "../steps";
 
   let stepManager: StepManager = getContext("stepManager");
   let disableSwap = false;
+
+  onMount(async () => {
+    AutoNumeric.multiple(".formatted-number", null, {
+      decimalPlaces: 8,
+    });
+  });
 
   const swap = async () => {
     disableSwap = true;

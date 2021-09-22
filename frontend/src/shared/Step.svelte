@@ -1,4 +1,7 @@
 <script lang="typescript">
+  import { fade, slide } from "svelte/transition";
+  import { sineInOut } from "svelte/easing";
+
   import type { State, Error } from "../steps";
 
   export let title: string;
@@ -22,6 +25,20 @@
       errorMessage = error.message;
     }
   }
+
+  function slideFade(node: any, { delay = 0, duration = 400 }) {
+    let f = fade(node, { delay, duration, easing: sineInOut });
+    let s = slide(node, { delay, duration, easing: sineInOut });
+
+    return {
+      delay,
+      duration,
+      css: (t: any, u: any) => {
+        console.log(`${f.css!(t, u)}; ${s.css!(t, u)}`);
+        return `${s.css!(t, u)};${f.css!(t, u)}`;
+      },
+    };
+  }
 </script>
 
 {#if isVisible}
@@ -42,11 +59,18 @@
         />
       </svg>
     {:else if isDone}
-      <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-green-500" viewBox="0 0 20 20" fill="currentColor">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        class="h-8 w-8 text-green-500"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+      >
         <path
-          fill-rule="evenodd"
-          d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-          clip-rule="evenodd"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
         />
       </svg>
     {:else}
@@ -56,8 +80,8 @@
     {/if}
     <div class="mx-2">
       <h3>{title}</h3>
-      {#if isActive}
-        <div class="content">
+      {#if $$slots.content && isActive}
+        <div class="content" transition:slideFade>
           <slot name="content" />
         </div>
       {/if}

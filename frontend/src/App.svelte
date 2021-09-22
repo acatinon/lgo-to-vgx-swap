@@ -50,14 +50,15 @@
     currentState = State.WaitingApproveConfirmation;
     stepManager.context
       .lgo!.approve(SWAP_CONTRACT, stepManager.context!.lgoBalance!)
-      .then((result) => {
-        if (result) {
-          currentState = State.WaitingApproveExecution;
-        } else {
-        }
+      .then(() => {
+        currentState = State.WaitingApproveExecution;
       })
       .catch((e: Error) => {
-        error = e;
+        if (e.code == 4001) {
+          currentState = State.Approving;
+        } else {
+          error = e;
+        }
       });
   };
 
@@ -65,14 +66,15 @@
     currentState = State.WaitingSwapConfirmation;
     stepManager.context
       .swap!.swap(stepManager.context!.lgoBalance!, stepManager.context.lgo!)
-      .then((result) => {
-        if (result) {
-          currentState = State.WaitingSwapExecution;
-        } else {
-        }
+      .then(() => {
+        currentState = State.WaitingSwapExecution;
       })
       .catch((e: Error) => {
-        error = e;
+        if (e.code == 4001) {
+          currentState = State.Swapping;
+        } else {
+          error = e;
+        }
       });
   };
 </script>

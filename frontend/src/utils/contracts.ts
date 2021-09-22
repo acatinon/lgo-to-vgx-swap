@@ -58,7 +58,7 @@ export class SwapContract extends Contract {
         super(signer, addr, swapAbi);
     }
 
-    public async swap(amount: BigNumber, lgo: ERC20): Promise<boolean> {
+    public async swap(amount: BigNumber, lgo: ERC20): Promise<void> {
         let amountBn = ethers.BigNumber.from(amount.multipliedBy(Math.pow(10, lgo.decimals)).toString());
         return await this.ethersContract.swap(amountBn);
     }

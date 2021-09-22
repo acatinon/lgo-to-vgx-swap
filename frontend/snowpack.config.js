@@ -7,7 +7,6 @@ module.exports = {
     bundle: true,
   },
   buildOptions: {
-    out: "../docs",
     metaUrlPath: `dist`,
   },
   plugins: [

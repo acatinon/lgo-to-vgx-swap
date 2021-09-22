@@ -1,5 +1,6 @@
 <script lang="typescript">
-  import { setContext } from "svelte";
+  import { afterUpdate, setContext } from "svelte";
+  import AutoNumeric from "autonumeric";
   import type { Error } from "./steps";
   import { StepManager, State } from "./steps";
   import { web3 } from "./utils/web3";
@@ -17,6 +18,12 @@
   let currentState = State.Approving;
 
   setContext("stepManager", stepManager);
+
+  afterUpdate(() => {
+    AutoNumeric.multiple(".formatted-number", null, {
+      decimalPlaces: 8,
+    });
+  });
 
   const connect = () => {
     web3Provider.connect().then(onConnected);

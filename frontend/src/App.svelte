@@ -106,6 +106,8 @@
       </Step>
 
       <WaitingSteps
+        confirmationTitle="Confirm the approval transaction on Metamask"
+        executionTitle="Wait for the approval transaction execution on the Ethereum blockchain..."
         refConfirmationState={State.WaitingApproveConfirmation}
         refExecutionState={State.WaitingApproveExecution}
         {currentState}
@@ -128,6 +130,8 @@
       </Step>
 
       <WaitingSteps
+        confirmationTitle="Confirm the swap transaction on Metamask"
+        executionTitle="Wait for the swap transaction execution on the Ethereum blockchain..."
         refConfirmationState={State.WaitingSwapConfirmation}
         refExecutionState={State.WaitingSwapExecution}
         {currentState}

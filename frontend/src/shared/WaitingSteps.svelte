@@ -3,13 +3,15 @@
 
   import Step from "./Step.svelte";
 
+  export let confirmationTitle: string;
+  export let executionTitle: string;
   export let refConfirmationState: State;
   export let refExecutionState: State;
   export let currentState: State;
   export let error: Error;
 </script>
 
-<Step title="Confirm the transaction on Metamask" refState={refConfirmationState} {currentState} {error}>
+<Step title={confirmationTitle} refState={refConfirmationState} {currentState} {error}>
   <svg slot="icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
     <path
       stroke-linecap="round"
@@ -19,12 +21,7 @@
     />
   </svg>
 </Step>
-<Step
-  title="Wait for the transaction execution on the Ethereum blockchain..."
-  refState={refExecutionState}
-  {currentState}
-  {error}
->
+<Step title={executionTitle} refState={refExecutionState} {currentState} {error}>
   <svg
     slot="icon"
     class="spin"
@@ -41,4 +38,7 @@
     />
     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
   </svg>
+  <div slot="content">
+    <p>Please don't close this window.</p>
+  </div>
 </Step>

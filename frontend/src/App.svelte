@@ -84,7 +84,8 @@
     <p>
       As you may know, Since LGO was acquired by Voyager, you had to swap your LGO tokens into VGX 2.0. Unfortunately,
       after the September 20 deadline, the official swap portal is closed. But the swap is still possible by interacting
-      directly with the blockchain. This small tool is designed to help you in the process to get your VGX 2.0.
+      directly with the blockchain. This small tool is designed to help you in the process to swap your LGO tokens into
+      VGX 2.0.
     </p>
     {#if isConnected}
       <Step title="Give permission to swap LGO tokens" refState={State.Approving} {currentState} {error}>
@@ -156,7 +157,9 @@
         </div>
       </Step>
     {:else}
-      <button class="m-auto block" on:click={connect}>Connect your wallet</button>
+      <div class="m-32">
+        <button class="m-auto block" on:click={connect}>Connect your wallet</button>
+      </div>
     {/if}
   </div>
 </div>

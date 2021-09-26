@@ -11,7 +11,7 @@ module.exports = {
   theme: {
     container: {
       center: true,
-      padding: '10rem',
+      padding: '16rem',
     },
     extend: {
       backgroundImage: {
